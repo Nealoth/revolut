@@ -18,7 +18,7 @@ task executableJar(type: Jar, dependsOn: test) {
 	manifest {
 		attributes 'Implementation-Title': 'standalone executable jar',
 				'Implementation-Version': version,
-				'Main-Class': 'com.sometest'
+				'Main-Class': 'com.sometest.Main'
 	}
 
 	from {

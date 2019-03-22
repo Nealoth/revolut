@@ -1,6 +1,5 @@
 package com.sometest;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.junit.BeforeClass;
 import org.junit.Test;
