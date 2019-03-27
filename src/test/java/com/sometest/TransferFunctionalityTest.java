@@ -7,7 +7,6 @@ import org.junit.Test;
 import java.math.BigDecimal;
 import java.util.Map;
 
-import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
 import static java.math.BigDecimal.ROUND_HALF_EVEN;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -15,7 +14,7 @@ import static org.hamcrest.Matchers.is;
 
 public class TransferFunctionalityTest {
 
-	private final static int PORT = 8080;
+	private final static int PORT = 8081;
 
 	@BeforeClass
 	public static void startApp() {
@@ -79,6 +78,7 @@ public class TransferFunctionalityTest {
 
 	private void createClient(JsonObject jsonObject) {
 		given()
+				.port(PORT)
 				.body(jsonObject)
 				.when()
 				.post("/v1/clients/")
@@ -88,6 +88,7 @@ public class TransferFunctionalityTest {
 
 	private void createBankAccount(JsonObject jsonObject) {
 		given()
+				.port(PORT)
 				.body(jsonObject)
 				.when()
 				.post("/v1/accounts/")
@@ -97,6 +98,7 @@ public class TransferFunctionalityTest {
 
 	private void addFundsOnBankAccount(JsonObject jsonObject) {
 		given()
+				.port(PORT)
 				.body(jsonObject)
 				.when()
 				.post("/v1/transactions/income")
@@ -105,7 +107,10 @@ public class TransferFunctionalityTest {
 	}
 
 	private BigDecimal getClientBalance(Long clientId) {
-		Float result = (Float) get("/v1/clients/{id}/accounts/", clientId)
+		Float result = (Float) given()
+				.port(PORT)
+				.when()
+				.get("/v1/clients/{id}/accounts/", clientId)
 				.then()
 				.statusCode(200)
 				.extract()
@@ -121,6 +126,7 @@ public class TransferFunctionalityTest {
 
 	private void makeTransfer(JsonObject jsonObject) {
 		given()
+				.port(PORT)
 				.body(jsonObject)
 				.when()
 				.post("/v1/transactions/transfer")

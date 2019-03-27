@@ -6,18 +6,18 @@ import com.sometest.repository.TransactionRepository;
 import javax.inject.Singleton;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Singleton
 class InMemoryTransactionRepository implements TransactionRepository {
 
 	private final static Map<Long, Transaction> store = new ConcurrentHashMap<>();
-	private Long id_sequence = 0L;
+	private AtomicLong id_sequence = new AtomicLong(0L);
 
 
 	@Override
 	public Transaction create(Transaction transaction) {
-		id_sequence++;
-		transaction.setId(id_sequence);
+		transaction.setId(id_sequence.incrementAndGet());
 		store.put(transaction.getId(), transaction);
 		return transaction;
 	}

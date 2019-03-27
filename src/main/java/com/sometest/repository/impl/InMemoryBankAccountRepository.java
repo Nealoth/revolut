@@ -9,12 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Singleton
 class InMemoryBankAccountRepository implements BankAccountRepository {
 
 	private final static Map<Long, BankAccount> store = new ConcurrentHashMap<>();
-	private Long id_sequence = 0L;
+	private AtomicLong id_sequence = new AtomicLong(0L);
 
 	@Override
 	public List<BankAccount> getAllAccounts() {
@@ -23,8 +24,7 @@ class InMemoryBankAccountRepository implements BankAccountRepository {
 
 	@Override
 	public BankAccount createBankAccount(BankAccount bankAccount) {
-		id_sequence++;
-		bankAccount.setId(id_sequence);
+		bankAccount.setId(id_sequence.incrementAndGet());
 		store.put(bankAccount.getId(), bankAccount);
 		return bankAccount;
 	}

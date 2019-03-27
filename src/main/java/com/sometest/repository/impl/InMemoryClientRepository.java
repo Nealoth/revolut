@@ -8,12 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Singleton
 class InMemoryClientRepository implements ClientRepository {
 
 	private final static Map<Long, Client> store = new ConcurrentHashMap<>();
-	private Long id_sequence = 0L;
+	private AtomicLong id_sequence = new AtomicLong(0L);
 
 	@Override
 	public List<Client> getClients() {
@@ -22,8 +23,7 @@ class InMemoryClientRepository implements ClientRepository {
 
 	@Override
 	public Client createClient(Client client) {
-		id_sequence++;
-		client.setId(id_sequence);
+		client.setId(id_sequence.incrementAndGet());
 		store.put(client.getId(), client);
 		return client;
 	}
